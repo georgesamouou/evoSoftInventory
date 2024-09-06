@@ -11,8 +11,9 @@ export interface Product {
 }
   
 export interface Inventory {
+    id: number;
     date: string;
     productId: string;
-    stock: Record<string, number>;  // Record<storeId, stock>
+    stock: Record<string, number>;  
 }
   

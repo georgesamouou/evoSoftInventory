@@ -1,10 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { loadInventories, saveInventory } from './services/localStorageService';
+import { Inventory, Product, Store } from './data/interfaces';
+import CreateInventory from './components/Inventory/CreateInventory';
+import InventoryList from './components/Inventory/InventoryList';
 
 function App() {
+  const stores: Store[] = [
+    { id: '1', name: 'Store A', address: 'Address A' },
+    { id: '2', name: 'Store B', address: 'Address B' },
+  ];
+
+  const products: Product[] = [
+    { id: '1', name: 'Product 1', price: 100 },
+    { id: '2', name: 'Product 2', price: 200 },
+  ];
+
+  const [inventories, setInventories] = useState<Inventory[]>(loadInventories());
+
+  const handleAddInventory = (inventory: Inventory) => {
+    const newInventories = [...inventories, inventory];
+    setInventories(newInventories);
+    saveInventory(newInventories);
+  };
+  const handleDeleteInventory = (index: number) => {
+    const newInventories = inventories.filter((_, i) => i !== index);
+    setInventories(newInventories);
+    saveInventory(newInventories);
+  };
+
+  const handleUpdateInventory = (index: number, updatedInventory: Inventory) => {
+    const newInventories = inventories.map((inventory, i) => (i === index ? updatedInventory : inventory));
+    setInventories(newInventories);
+    saveInventory(newInventories);
+  };
   return (
     <div className="App">
-      new project
+      <h1>Inventory Management</h1>
+      <CreateInventory stores={stores} products={products} onSubmit={handleAddInventory} />
+      <InventoryList
+        inventories={inventories}
+        stores={stores}
+        products={products}
+        onDelete={handleDeleteInventory}
+        onUpdate={handleUpdateInventory}
+      />
     </div>
   );
 }
