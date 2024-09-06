@@ -3,8 +3,8 @@ import { Store, Product, Inventory } from '../../data/interfaces';
 import { saveInventory } from '../../services/localStorageService';
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import { Card } from '@mui/material';
-
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 interface Props {
     inventories: Inventory[];
     stores: Store[];
@@ -80,6 +80,8 @@ const InventoryList: React.FC<Props> = ({ inventories, stores, products, onDelet
     const handleEditClick = (index: number) => {
         setIsEditing(index);
         setEditingInventory({ ...inventories[index] });
+        
+        console.log("toast")
     };
 
     const handleDeleteClick = (index: number) => {
@@ -111,6 +113,7 @@ const InventoryList: React.FC<Props> = ({ inventories, stores, products, onDelet
         onUpdate(index, editingInventory); 
         setIsEditing(null);
         setEditingInventory(null);
+        toast("Updated!")
         }
     };
 
@@ -120,81 +123,81 @@ const InventoryList: React.FC<Props> = ({ inventories, stores, products, onDelet
     };
     
   return (
-    <Card>
+    <Card className='container'>
         {/*<div style={{ height: 300,}}>
             <DataGrid rows={inventories} columns={columns} />
         </div>*/}
-        <table className="table table-striped table-bordered">
-        <thead className="thead-dark">
-            <tr>
-            <th>Date</th>
-            <th>Product</th>
-            {stores.map((store) => (
-                <th key={store.id}>{store.name}</th>
-            ))}
-            <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {inventories.map((inventory, index) => (
-            <tr key={index}>
-                {isEditing === index ? (
-                <>
-                    <td>
-                    <input
-                        type="date"
-                        className="form-control"
-                        value={editingInventory?.date || ''}
-                        onChange={(e) => handleFieldChange('date', e.target.value)}
-                    />
-                    </td>
-                    <td>
-                    <select
-                        className="form-control"
-                        value={editingInventory?.productId || ''}
-                        onChange={(e) => handleFieldChange('productId', e.target.value)}
-                    >
-                        <option value="">Select a product</option>
-                        {products.map((product) => (
-                        <option key={product.id} value={product.id}>
-                            {product.name}
-                        </option>
-                        ))}
-                    </select>
-                    </td>
-                    {stores.map((store) => (
-                    <td key={store.id}>
+        <table className="table table-striped table-bordered container">
+            <thead className="thead-dark">
+                <tr>
+                <th>Date</th>
+                <th>Product</th>
+                {stores.map((store) => (
+                    <th key={store.id}>{store.name}</th>
+                ))}
+                <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {inventories.map((inventory, index) => (
+                <tr key={index}>
+                    {isEditing === index ? (
+                    <>
+                        <td>
                         <input
-                        type="number"
-                        className="form-control"
-                        value={editingInventory?.stock[store.id] || ''}
-                        onChange={(e) => handleStockChange(store.id, parseInt(e.target.value))}
+                            type="date"
+                            className="form-control"
+                            value={editingInventory?.date || ''}
+                            onChange={(e) => handleFieldChange('date', e.target.value)}
                         />
-                    </td>
-                    ))}
-                    <td>
-                    <button className="btn btn-primary" onClick={() => handleSaveClick(index)}>Save</button>
-                    <button className="btn btn-secondary" onClick={handleCancelClick}>Cancel</button>
-                    </td>
-                </>
-                ) : (
-                <>
-                    <td>{inventory.date}</td>
-                    <td>{getProductName(inventory.productId)}</td>
-                    {stores.map((store) => (
-                    <td key={store.id}>{inventory.stock[store.id] || 0}</td>
-                    ))}
-                    <td>
-                    <button className="btn btn-warning" onClick={() => handleEditClick(index)}>Edit</button>
-                    <button className="btn btn-danger" onClick={() => handleDeleteClick(index)}>Delete</button>
-                    </td>
-                </>
-                )}
-            </tr>
-            ))}
-        </tbody>
+                        </td>
+                        <td>
+                        <select
+                            className="form-control"
+                            value={editingInventory?.productId || ''}
+                            onChange={(e) => handleFieldChange('productId', e.target.value)}
+                        >
+                            <option value="">Select a product</option>
+                            {products.map((product) => (
+                            <option key={product.id} value={product.id}>
+                                {product.name}
+                            </option>
+                            ))}
+                        </select>
+                        </td>
+                        {stores.map((store) => (
+                        <td key={store.id}>
+                            <input
+                            type="number"
+                            className="form-control"
+                            value={editingInventory?.stock[store.id] || ''}
+                            onChange={(e) => handleStockChange(store.id, parseInt(e.target.value))}
+                            />
+                        </td>
+                        ))}
+                        <td>
+                        <button className="btn btn-primary" onClick={() => handleSaveClick(index)}>Save</button>
+                        <button className="btn btn-secondary" onClick={handleCancelClick}>Cancel</button>
+                        </td>
+                    </>
+                    ) : (
+                    <>
+                        <td>{inventory.date}</td>
+                        <td>{getProductName(inventory.productId)}</td>
+                        {stores.map((store) => (
+                        <td key={store.id}>{inventory.stock[store.id] || 0}</td>
+                        ))}
+                        <td className='d-flex justify-content-between ml-3 mr-3'>
+                            <button className="btn btn-warning" onClick={() => handleEditClick(index)}>Edit</button>
+                            <button className="btn btn-danger" onClick={() => handleDeleteClick(index)}>Delete</button>
+                        </td>
+                    </>
+                    )}
+                </tr>
+                ))}
+            </tbody>
         </table>
-
+        <ToastContainer/>
     </Card>
   );
 };

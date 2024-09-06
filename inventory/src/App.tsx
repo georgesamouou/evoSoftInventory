@@ -5,7 +5,9 @@ import { loadInventories, saveInventory } from './services/localStorageService';
 import { Inventory, Product, Store } from './data/interfaces';
 import CreateInventory from './components/Inventory/CreateInventory';
 import InventoryList from './components/Inventory/InventoryList';
-
+import { Box, Card, Typography } from '@mui/material';
+import { ToastContainer, toast } from 'react-toast'
+import Header from './components/Header';
 function App() {
   const stores: Store[] = [
     { id: '1', name: 'Store A', address: 'Address A' },
@@ -36,17 +38,23 @@ function App() {
     saveInventory(newInventories);
   };
   return (
-    <div className="App">
-      <h1>Inventory Management</h1>
+    < >
+      <Header/>
+      <Typography variant='h5' component='span' sx={{ mb: 10,mt:10, textAlign:"center" }}>
+        <h1>Inventory Management</h1>
+      </Typography>
       <CreateInventory stores={stores} products={products} onSubmit={handleAddInventory} />
-      <InventoryList
-        inventories={inventories}
-        stores={stores}
-        products={products}
-        onDelete={handleDeleteInventory}
-        onUpdate={handleUpdateInventory}
-      />
-    </div>
+      <Box>
+        <InventoryList
+          inventories={inventories}
+          stores={stores}
+          products={products}
+          onDelete={handleDeleteInventory}
+          onUpdate={handleUpdateInventory}
+        />
+        <ToastContainer />
+      </Box>
+    </>
   );
 }
 
