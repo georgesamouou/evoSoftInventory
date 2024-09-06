@@ -9,6 +9,7 @@ import { Box, Card, Typography } from '@mui/material';
 import { ToastContainer, toast } from 'react-toast'
 import Header from './components/Header';
 import Export from './components/Export';
+import { useTranslation } from 'react-i18next';
 function App() {
   const stores: Store[] = [
     { id: '1', name: 'Store A', address: 'Address A' },
@@ -38,11 +39,12 @@ function App() {
     setInventories(newInventories);
     saveInventory(newInventories);
   };
+  const { t } = useTranslation(); 
   return (
     < >
       <Header/>
       <Typography variant='h5' component='span' sx={{ mb: 10,mt:10, textAlign:"center" }}>
-        <h1>Inventory Management</h1>
+        <h1>{t("Inventory_Management")}</h1>
       </Typography>
       <div className='text-center'>
         <Export inventories={inventories} stores={stores} products={products}/>

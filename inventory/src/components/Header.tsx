@@ -1,6 +1,12 @@
-import React from 'react'
-
+import React, { ChangeEvent, useState } from 'react'
+import { useTranslation } from 'react-i18next';
 export default function Header() {
+    const [language, setLanguage] = useState('en');
+    const { i18n } = useTranslation();
+
+    const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        i18n.changeLanguage(event.target.value);
+    };
   return (
     <header className="bg-primary text-white py-3">
         <div className="container">
@@ -23,6 +29,12 @@ export default function Header() {
                     </li>
                     <li className="nav-item">
                         <a className="nav-link" href="#">Contact</a>
+                    </li>
+                    <li>
+                    <select className="form-select" value={i18n.language} onChange={handleLanguageChange}>
+                        <option value="en">En</option>
+                        <option value="fr">Fr</option>
+                    </select>
                     </li>
                     </ul>
                 </div>
